@@ -3,10 +3,10 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-	private bool modeEdit = false;
+	private bool modeEdit = true;
 	private bool canControl = true;
 	private bool fireOn = false;
-	private float speedReactor = 4.0f;
+	private float speedReactor = 3.0f;
 	private RaycastHit ray;
 	private GameObject prefabReactor;
 	private Reactor[] reactors;
@@ -15,6 +15,17 @@ public class Player : MonoBehaviour {
 	void Start () {
 		prefabReactor = Instantiate(Resources.Load("Reactor")) as GameObject;	
 		reactors = gameObject.GetComponentsInChildren<Reactor>() as Reactor[];
+		rigidbody.isKinematic = modeEdit;
+	}
+
+	void ActivateReactor(bool active, int unit) {
+		Reactor reactor = reactors[unit];
+		if (active) {
+			rigidbody.AddForceAtPosition(reactor.transform.forward * speedReactor, reactor.transform.position);
+			reactor.Activate();
+		} else {
+			reactor.Deactivate();
+		}
 	}
 	
 	// Update is called once per frame
@@ -31,6 +42,7 @@ public class Player : MonoBehaviour {
 			Ray cameraMouse = Camera.main.ScreenPointToRay (Input.mousePosition);
 			if (Physics.Raycast(cameraMouse.origin, cameraMouse.direction, out ray, 1024.0f)) {
 				prefabReactor.transform.position = ray.point;
+				prefabReactor.transform.LookAt(ray.point - ray.normal);
 				if (Input.GetButtonDown ("Fire1")) {
 					prefabReactor.transform.parent = transform;
 					prefabReactor = Instantiate(Resources.Load("Reactor")) as GameObject;	
@@ -40,31 +52,8 @@ public class Player : MonoBehaviour {
 			if (canControl) {
 
 
-				if (Input.GetKey(KeyCode.T)) {
-					Reactor reactor = reactors[0];
-					rigidbody.AddForceAtPosition(transform.up * speedReactor, reactor.transform.position);
-				}
-
-
-				if (Input.GetKey(KeyCode.F)) {
-					
-					Reactor reactor = reactors[1];
-					rigidbody.AddForceAtPosition(transform.up * speedReactor, reactor.transform.position);
-				}
-
-
-				if (Input.GetKey(KeyCode.H)) {
-					
-					Reactor reactor = reactors[2];
-					rigidbody.AddForceAtPosition(transform.up * speedReactor, reactor.transform.position);
-				}
-
-
-				if (Input.GetKey(KeyCode.B)) {
-					
-					Reactor reactor = reactors[3];
-					rigidbody.AddForceAtPosition(transform.up * speedReactor, reactor.transform.position);
-				}
+				ActivateReactor(Input.GetKey(KeyCode.T), 0);
+				ActivateReactor(Input.GetKey(KeyCode.Y), 1);
 
 				if (Input.GetButton ("Jump")) {
 					//transform.rotation = Quaternion.Slerp(transform.rotation, Camera.main.transform.rotation, Time.deltaTime);

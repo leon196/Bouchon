@@ -3,15 +3,29 @@ using System.Collections;
 
 public class Reactor : MonoBehaviour {
 
+	public bool fireOn = false;
+	private ParticleEmitter[] emitters;
+
 	// Use this for initialization
 	void Start () {
-	
+		fireOn = false;
+		emitters = GetComponentsInChildren<ParticleEmitter>() as ParticleEmitter[];
 	}
 
-	void Activate () {
-		ParticleEmitter[] emitters = GetComponentsInChildren<ParticleEmitter>() as ParticleEmitter[];
-		foreach (ParticleEmitter emitter in emitters) {
-			emitter.emit = true;
+	public void Activate () { 
+		if (fireOn == false) {
+			fireOn = true;
+			foreach (ParticleEmitter emitter in emitters) {
+				emitter.emit = true;
+			}
+		}
+	}
+	public void Deactivate () {
+		if (fireOn == true) {
+			fireOn = false;
+			foreach (ParticleEmitter emitter in emitters) {
+				emitter.emit = false;
+			}
 		}
 	}
 }
