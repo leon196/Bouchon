@@ -7,4 +7,11 @@ public class Reactor : MonoBehaviour {
 	void Start () {
 	
 	}
+
+	void Activate () {
+		ParticleEmitter[] emitters = GetComponentsInChildren<ParticleEmitter>() as ParticleEmitter[];
+		foreach (ParticleEmitter emitter in emitters) {
+			emitter.emit = true;
+		}
+	}
 }

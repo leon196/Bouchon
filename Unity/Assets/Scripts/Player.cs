@@ -3,9 +3,10 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-	private bool modeEdit = true;
+	private bool modeEdit = false;
 	private bool canControl = true;
 	private bool fireOn = false;
+	private float speedReactor = 4.0f;
 	private RaycastHit ray;
 	private GameObject prefabReactor;
 	private Reactor[] reactors;
@@ -13,6 +14,7 @@ public class Player : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		prefabReactor = Instantiate(Resources.Load("Reactor")) as GameObject;	
+		reactors = gameObject.GetComponentsInChildren<Reactor>() as Reactor[];
 	}
 	
 	// Update is called once per frame
@@ -36,11 +38,42 @@ public class Player : MonoBehaviour {
 			}
 		} else {
 			if (canControl) {
+
+
+				if (Input.GetKey(KeyCode.T)) {
+					Reactor reactor = reactors[0];
+					rigidbody.AddForceAtPosition(transform.up * speedReactor, reactor.transform.position);
+				}
+
+
+				if (Input.GetKey(KeyCode.F)) {
+					
+					Reactor reactor = reactors[1];
+					rigidbody.AddForceAtPosition(transform.up * speedReactor, reactor.transform.position);
+				}
+
+
+				if (Input.GetKey(KeyCode.H)) {
+					
+					Reactor reactor = reactors[2];
+					rigidbody.AddForceAtPosition(transform.up * speedReactor, reactor.transform.position);
+				}
+
+
+				if (Input.GetKey(KeyCode.B)) {
+					
+					Reactor reactor = reactors[3];
+					rigidbody.AddForceAtPosition(transform.up * speedReactor, reactor.transform.position);
+				}
+
 				if (Input.GetButton ("Jump")) {
 					//transform.rotation = Quaternion.Slerp(transform.rotation, Camera.main.transform.rotation, Time.deltaTime);
+					rigidbody.AddForce(transform.up * 12);
+					/*
 					foreach (Reactor reactor in reactors) {
 						rigidbody.AddForceAtPosition(transform.up * 12, reactor.transform.position);
 					}
+					*/
 					if (fireOn == false) {
 						fireOn = true;
 						foreach (Reactor reactor in reactors) {

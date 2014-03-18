@@ -23,7 +23,8 @@ function Start () {
 }
 
 function LateUpdate () {
-    if (target && Input.GetButton("Fire2")) {
+    //  && Input.GetButton("Fire2")
+    if (target) {
         x += Input.GetAxis("Mouse X") * xSpeed * 0.02;
         y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02;
  		
